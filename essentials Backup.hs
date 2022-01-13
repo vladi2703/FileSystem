@@ -89,9 +89,9 @@ module Essentials where
     getParentPath [path] = ["/"] --if only one dir -> return root
     getParentPath path = init path
 
-    goToPath :: PathStr -> SystemElement -> SystemElement
-    goToPath "/" currentRoot = currentRoot
-    goToPath pathStr currentRoot= getDir pathArr currentRoot
+    goToPath :: PathStr -> SystemElement
+    goToPath "/"     = root
+    goToPath pathStr = getDir pathArr root
         where pathArr = convertPathToArr pathStr
     -- containsDir :: SystemElement -> SystemElement -> Bool
     -- potentialParent `containsDir` toCheck = 
@@ -105,8 +105,8 @@ module Essentials where
     -- ○ .. означава родителската директория, например cd 
 
     -- Current path is FULL Path
-    changeDirectory :: PathStr -> PathStr -> SystemElement -> SystemElement
-    changeDirectory pathToGo currentPath currentRoot= goToPath (getFullPath currentPath pathToGo) currentRoot
+    changeDirectory :: PathStr -> PathStr -> SystemElement
+    changeDirectory pathToGo currentPath = goToPath (getFullPath currentPath pathToGo)
 
     --may be BOOL to indicate if file is added 
     -- ! FULL PATH  required 
@@ -128,10 +128,12 @@ module Essentials where
 --if this file exists it gets overwritten
 
 --only have to make -> root = addFile .....
-    
-    concatenateFiles filePaths outputFile currentPath currentRoot
-            = addFile fileName output filePath (goToPath currentPath currentRoot)
-        where output = concatMap (\x -> getContent(goToPath (getFullPath currentPath x) currentRoot)) filePaths
+    concatenateFiles :: Foldable t => t PathStr -> [Char] -> PathStr -> SystemElement
+    concatenateFiles filePaths outputFile currentPath
+            = addFile fileName output filePath (goToPath currentPath)
+        where output
+                -- |null filePaths = readInput 
+                |otherwise = concatMap (getContent . goToPath . getFullPath currentPath) filePaths
               outputFilePathArr = convertPathToArr outputFile
               fileName = last outputFilePathArr
               filePath = init outputFilePathArr
@@ -156,4 +158,4 @@ module Essentials where
     -- runCmd :: String -> [String] -> PathStr -> IO PathStr
     -- runCmd "pwd" _ currentPath = 
 
-    
+    main = print (removeFile ["File1"] (goToPath "Folder1"))
