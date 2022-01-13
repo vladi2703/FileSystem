@@ -138,12 +138,6 @@ getDir (dirToCheck: rest) currentDir =
 --     else do
 --     runInput input filePath --returns the new path
 
-runInput :: String -> PathStr -> IO PathStr
-runInput inputArr currentPath = runCmd (head $ words inputArr) (tail $ words inputArr) currentPath
-
-runCmd :: String -> [String] -> PathStr -> IO PathStr
-runCmd "pwd" _ currentPath = printWorkingDirectory currentPath
---runCmd "cd" args currentPath = changeDirectory args currentPath
 
 
 printWorkingDirectory :: PathStr -> IO PathStr

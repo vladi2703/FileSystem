@@ -1,4 +1,4 @@
- module Essentials where
+module Essentials where
     import Prelude
     import Data.List
     import Types
@@ -38,7 +38,7 @@
     iterator = File {fileName = "Iterator", fileContent = "Iter" }
 --Path converters
     convertPathToStr :: PathArr -> PathStr
-    convertPathToStr pathArray =  intercalate "/" pathArray
+    convertPathToStr pathArray =  "/" ++ intercalate "/" pathArray ----convertPathToArr ignores the /
 
     --not enough time to get comfortable using text and invesitgate how it behaves in comparison with String
     convertPathToArr :: PathStr -> PathArr
@@ -126,28 +126,42 @@
                   dirContentNoNewCurr = filter (/=newCurr) dirContent
 --if this file exists it gets overwritten
 
-    --concatenateFiles :: [PathStr] -> PathStr -> PathStr -> 
 --only have to make -> root = addFile .....
+    concatenateFiles :: Foldable t => t PathStr -> [Char] -> PathStr -> SystemElement
     concatenateFiles filePaths outputFile currentPath
-            | outputFile == "" = putStrLn output
-            | otherwise = print $ addFile fileName output filePath (goToPath currentPath)
-        where output 
+            = addFile fileName output filePath (goToPath currentPath)
+        where output
                 -- |null filePaths = readInput 
                 |otherwise = concatMap (getContent . goToPath . getFullPath currentPath) filePaths
               outputFilePathArr = convertPathToArr outputFile
               fileName = last outputFilePathArr
               filePath = init outputFilePathArr
-            
+
     copyTree :: SystemElement -> SystemElement
     copyTree tree@(File _ _) = tree
     copyTree tree@(Directory name contents) = Directory name (map copyTree contents)
 
-    
+
+    readInput :: [Char] -> String -> IO ()
     readInput input "." = print input
-    readInput input currentLine = do currInput <- getLine 
-                                     readInput (input ++ currentLine) currInput   
-                                      
+    readInput input currentLine = do currInput <- getLine
+                                     readInput (input ++ currentLine) currInput
+
+
+-- when rm called -> root = rm PATH_ARR root
+--          where PATH_ARR = convertPathToArr getFullPath currentPath
+    removeFile :: PathArr -> SystemElement -> SystemElement
+    removeFile _ currentDir@(File _ _ ) = currentDir --invalid current dir, cannot be File
+    removeFile [name] currentDir@(Directory _ dirContent) = currentDir{directoryContent = filter ((/= name) . getName) dirContent}
+    removeFile [name] currentDir@(Directory _ []) = currentDir
+    removeFile pathToRemoveFrom currentDir@(Directory dirName dirContent)
+        | newCurr == dummy = currentDir --invalid Path
+        | newCurr /= dummy = currentDir{directoryContent = dirContentNoNewCurr ++ [removeFile (tail pathToRemoveFrom) newCurr]}
+            where toSearch = head $ init pathToRemoveFrom
+                  newCurr = getDirByName toSearch currentDir
+                  dirContentNoNewCurr = filter (/=newCurr) dirContent
 
     -- runCmd :: String -> [String] -> PathStr -> IO PathStr
     -- runCmd "pwd" _ currentPath = 
-     
+
+    main = print (removeFile ["File1"] (goToPath "Folder1"))
