@@ -40,6 +40,8 @@ module Interface where
                             putStrLn currentPath
                             return (currentPath, currentRoot)
 
+    -- /> cd.. -> //>
+    -- /Folder1> cd.. -> //>
     changeDirCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
     changeDirCommand [".."] currentPath currentRoot = return (convertPathToStr (getParentPath (convertPathToArr currentPath)), currentRoot)
     changeDirCommand [path] currentPath currentRoot = if changeDirectory path currentPath currentRoot /= dummy
@@ -74,8 +76,15 @@ module Interface where
                                                             else tail $ dropWhile (/= ">") filesList--head is ">"
 
     removeFileCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
-    removeFileCommand [files] currentPath currentRoot = return(currentPath, removeFile pathToRemoveFrom currentDir)
-        where pathToRemoveFrom = convertPathToArr(getFullPath currentPath files)
+
+
+    removeFileCommand [] currentPath currentRoot = return(currentPath, currentRoot)
+    removeFileCommand [file] currentPath currentRoot = return(currentPath, removeFile pathToRemoveFrom currentDir)
+        where pathToRemoveFrom = convertPathToArr(getFullPath currentPath file)
+              currentDir = goToPath currentPath currentRoot
+    removeFileCommand (file:files) currentPath currentRoot = do (currPath, newRoot) <- removeFileCommand files currentPath (removeFile pathToRemoveFrom currentDir)
+                                                                return(currentPath, newRoot)
+        where pathToRemoveFrom = convertPathToArr(getFullPath currentPath file)
               currentDir = goToPath currentPath currentRoot
 
     readInput :: [Char] -> String -> IO()

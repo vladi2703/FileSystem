@@ -39,6 +39,7 @@ module Essentials where
     iterator = File {fileName = "Iterator", fileContent = "Iter" }
 --Path converters
     convertPathToStr :: PathArr -> PathStr
+    convertPathToStr ["/"] = "/"
     convertPathToStr pathArray =  "/" ++ intercalate "/" pathArray ----convertPathToArr ignores the /
 
     --not enough time to get comfortable using text and invesitgate how it behaves in comparison with String
