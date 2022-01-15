@@ -64,20 +64,24 @@ module Interface where
         return (currentPath, currentRoot)
 
     concatenateFilesCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
-    -- "Folder1 Folder1 Folder1 Folder1 Folder1 "
     concatenateFilesCommand args currentPath currentRoot
         | null outputFile =  do putStrLn $ concatMap (\x -> getContent(goToPath (getFullPath currentPath x) currentRoot)) inputFilePaths
                                 return (currentPath, currentRoot)
+        | null inputFilePaths = do output <- readInput "" ""
+                                   return (currentPath, addFile fileName output filePath (goToPath currentPath currentRoot))
         | otherwise = return (currentPath, concatenateFiles inputFilePaths (head outputFile) currentPath currentRoot)
                                       where filesList = args
                                             inputFilePaths = takeWhile (/= ">") filesList
                                             outputFile = if null $ dropWhile (/= ">") filesList
                                                             then []
                                                             else tail $ dropWhile (/= ">") filesList--head is ">"
+                                            -- FOR SECOND CASE 
+                                            outputFilePathArr = convertPathToArr (head outputFile)
+                                            fileName = last outputFilePathArr
+                                            filePath = init outputFilePathArr
+
 
     removeFileCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
-
-
     removeFileCommand [] currentPath currentRoot = return(currentPath, currentRoot)
     removeFileCommand [file] currentPath currentRoot = return(currentPath, removeFile pathToRemoveFrom currentDir)
         where pathToRemoveFrom = convertPathToArr(getFullPath currentPath file)
@@ -87,7 +91,8 @@ module Interface where
         where pathToRemoveFrom = convertPathToArr(getFullPath currentPath file)
               currentDir = goToPath currentPath currentRoot
 
-    readInput :: [Char] -> String -> IO()
-    readInput input "." = print input
+    
+    readInput :: String -> String -> IO String
+    readInput input "." = return input
     readInput input currentLine = do currInput <- getLine
                                      readInput (input ++ currentLine) currInput

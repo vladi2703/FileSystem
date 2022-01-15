@@ -129,7 +129,6 @@ module Essentials where
 --if this file exists it gets overwritten
 
 --only have to make -> root = addFile .....
-    
     concatenateFiles filePaths outputFile currentPath currentRoot
             = addFile fileName output filePath (goToPath currentPath currentRoot)
         where output = concatMap (\x -> getContent(goToPath (getFullPath currentPath x) currentRoot)) filePaths
