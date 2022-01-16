@@ -94,32 +94,21 @@ module Essentials where
     goToPath "/" currentRoot = currentRoot
     goToPath pathStr currentRoot= getDir pathArr currentRoot
         where pathArr = convertPathToArr pathStr
-    -- containsDir :: SystemElement -> SystemElement -> Bool
-    -- potentialParent `containsDir` toCheck = 
-
--- cd — променя текущата директория 
-    -- ○ синтаксисът е cd <директория> 
-    -- ○ cd /full/path сменя текущата директория с тази, зададена като 
--- параметър 
-    -- ○ cd relative/path сменя текущата директория с тази, зададена с 
-    -- относителен път относно текущата директория 
-    -- ○ .. означава родителската директория, например cd 
-
+  
     -- Current path is FULL Path
     changeDirectory :: PathStr -> PathStr -> SystemElement -> SystemElement
-    changeDirectory pathToGo currentPath currentRoot= goToPath (getFullPath currentPath pathToGo) currentRoot
+    changeDirectory pathToGo currentPath currentRoot = goToPath (getFullPath currentPath pathToGo) currentRoot
 
-    --may be BOOL to indicate if file is added 
     -- ! FULL PATH  required 
-    --when path to add to is empty -> then we are in the desired directory and we have to create the file
+    -- when path to add to is empty -> then we are in the desired directory and we have to create the file
     -- we create the file when to the content of current Directory we create and add the file we want
     addFile :: FileName -> Content -> [DirName] -> SystemElement -> SystemElement
     addFile fileName fileContent pathToAddTo currentDir@(File _ _) = currentDir
     addFile fileName fileContent [] currentDir@(Directory dirName dirContent)
              = currentDir{directoryContent = dirContent ++ [File fileName fileContent]}
--- in order to get to the desired directory we check if the next folder in the path is part of the contents of the current folder
--- if the current folder is parrent of the desired one we continue the reccursion and we add the rest of the content of the current Folder
--- if we don't find the desired folder in the current -> then we return the current folder in order to stop searching because an invalid path was given
+    -- in order to get to the desired directory we check if the next folder in the path is part of the contents of the current folder
+    -- if the current folder is parrent of the desired one we continue the reccursion and we add the rest of the content of the current Folder
+    -- if we don't find the desired folder in the current -> then we return the current folder in order to stop searching because an invalid path was given
     addFile fileName fileContent pathToAddTo currentDir@(Directory dirName dirContent)
         | newCurr == dummy = currentDir --invalid pathToAddTo
         | newCurr /= dummy = currentDir{directoryContent = dirContentNoNewCurr ++ [addFile fileName fileContent (tail pathToAddTo) newCurr]}
@@ -128,7 +117,6 @@ module Essentials where
                   dirContentNoNewCurr = filter (/=newCurr) dirContent
 --if this file exists it gets overwritten
 
---only have to make -> root = addFile .....
     concatenateFiles filePaths outputFile currentPath currentRoot
             = addFile fileName output filePath (goToPath currentPath currentRoot)
         where output = concatMap (\x -> getContent(goToPath (getFullPath currentPath x) currentRoot)) filePaths
@@ -145,15 +133,9 @@ module Essentials where
     removeFile :: PathArr -> SystemElement -> SystemElement
     removeFile _ currentDir@(File _ _ ) = currentDir --invalid current dir, cannot be File
     removeFile [name] currentDir@(Directory _ dirContent) = currentDir{directoryContent = filter ((/= name) . getName) dirContent}
-    removeFile [name] currentDir@(Directory _ []) = currentDir
     removeFile pathToRemoveFrom currentDir@(Directory dirName dirContent)
         | newCurr == dummy = currentDir --invalid Path
         | newCurr /= dummy = currentDir{directoryContent = dirContentNoNewCurr ++ [removeFile (tail pathToRemoveFrom) newCurr]}
             where toSearch = head $ init pathToRemoveFrom
                   newCurr = getDirByName toSearch currentDir
                   dirContentNoNewCurr = filter (/=newCurr) dirContent
-
-    -- runCmd :: String -> [String] -> PathStr -> IO PathStr
-    -- runCmd "pwd" _ currentPath = 
-
-    

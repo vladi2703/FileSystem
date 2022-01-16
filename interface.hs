@@ -8,14 +8,14 @@ module Interface where
 
     run :: PathStr -> SystemElement -> IO ()
     run currentPath currentRoot = do
+            putStr (currentPath ++ "> " ) --TODO: Test for problems
             cmd <- getLine
-            if (cmd == "")
+            if cmd == ""
                 then run currentPath currentRoot
             else if cmd == "exit"
                 then return()
             else do
                 (newPath, newRoot) <- processInput cmd currentPath currentRoot
-                putStr (newPath ++ "> " )
                 run newPath newRoot
 
 
@@ -40,8 +40,6 @@ module Interface where
                             putStrLn currentPath
                             return (currentPath, currentRoot)
 
-    -- /> cd.. -> //>
-    -- /Folder1> cd.. -> //>
     changeDirCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
     changeDirCommand [".."] currentPath currentRoot = return (convertPathToStr (getParentPath (convertPathToArr currentPath)), currentRoot)
     changeDirCommand [path] currentPath currentRoot = if changeDirectory path currentPath currentRoot /= dummy
@@ -54,7 +52,7 @@ module Interface where
                                             return (currentPath, currentRoot)
 
 --cd scheme/../haskell/../scheme/../haskell е еквивалентно на cd haskell
-
+--cd Folder1/../Folder2/../Folder1/../Folder2 е еквивалентно на cd Folder2
     listContentsCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
     listContentsCommand [] currentPath currentRoot = do
                         putStrLn $ getContent $ goToPath currentPath currentRoot
@@ -91,7 +89,6 @@ module Interface where
         where pathToRemoveFrom = convertPathToArr(getFullPath currentPath file)
               currentDir = goToPath currentPath currentRoot
 
-    
     readInput :: String -> String -> IO String
     readInput input "." = return input
     readInput input currentLine = do currInput <- getLine
