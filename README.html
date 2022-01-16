@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>README.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%D1%84%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D0%B0-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0">Файлова система</h1>
+<p>Проста имплементация на in memory файлова система. Курсов проект по Функционално програмиране @ ФМИ</p>
+<h2 id="%D1%81%D1%82%D0%B0%D1%80%D1%82%D0%B8%D1%80%D0%B0%D0%BD%D0%B5-%D0%BD%D0%B0-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0">Стартиране на проекта</h2>
+<p>За да бъде стартиран проекта под Windows, трябва да отворите терминала в директорията, в която са изтеглени трите файла: <code>essentials.hs, interface.hs, types.hs</code>  и да въведете следните команди:</p>
+<pre class="hljs"><code><div>ghci -w ./interface.hs
+run &quot;/&quot; root
+</div></code></pre>
+<p>Командата <code>exit</code> служи за прекратяване изпълнението на проекта.</p>
+<h2 id="%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%B8%D0%B4%D0%B5%D1%8F-%D0%BD%D0%B0-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0">Описание и идея на проекта</h2>
+<p>Целта на проекта е да се реализира опростена имплементация на UNIX based файлова система. Проектът записва информацията за файловата система в паметта. Програмата предлага конзолен интерфейс, като поддържа следните команди:</p>
+<ul>
+<li><code>pwd</code> (Print working directory) - изпечатва текущата работна директория</li>
+<li><code>cd</code> (Change directory) - променя текущата работна директория</li>
+<li><code>ls</code> (List contents) - извежда списък със съдържанието на директорията</li>
+<li><code>cat</code> - конкатенира съдържанието на избрани файлове</li>
+<li><code>rm</code> (Remove) - изтрива избран файл</li>
+</ul>
+<h2 id="%D0%BF%D1%80%D0%BE%D0%B1%D0%BB%D0%B5%D0%BC%D0%B8-%D0%BF%D1%80%D0%B8-%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%D1%82%D0%B0">Проблеми при реализацията</h2>
+<p>Един от най-големите проблеми при имплементацията на проекта беше, че данните в Haskell са непроменими(immutable). Това поражда нуждата когато искаме да променим даден елемент от дървото, репрезентиращо, файловата система трябва да обходим цялата структура и да създадем копие на текущата версия, но с променен желания елемент. Друг проблем, който породи невъзможността за промяна на данни в Haskell бе, че променливата, съхраняваща текущата директория и текущата версия на файловото дърво трябва да бъдат подавани като аргумент на повечето функции, което възпрепятства на четимостта на кода.</p>
+<h2 id="%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0">Структура</h2>
+<p>Проектът е разделен в три отделни модула:</p>
+<ul>
+<li>модул, отговарящ за предефинираните типове <code>Types.hs</code></li>
+<li>модул, отговарящ за основните функции <code>Essentials.hs</code></li>
+<li>модул, отговарящ за конзолния интерфейс <code>Interface.hs</code></li>
+</ul>
+<h2 id="%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F">Реализация</h2>
+<h3 id="%D0%BC%D0%BE%D0%B4%D1%83%D0%BB-%D0%B7%D0%B0-%D1%82%D0%B8%D0%BF%D0%BE%D0%B2%D0%B5%D1%82%D0%B5">Модул за типовете</h3>
+<p>При стартиране на проекта в паметта се заделя предварително създадено дърво със следната структура:</p>
+<pre class="hljs"><code><div>/
+├── Folder1
+|    ├── Folder1.1
+|    │       └─ ()
+|    └─ File1
+|          └─ (Content of file1)
+├── File2
+|    └── (Content of file2)
+|
+├── Folder2
+|    ├── File2.1
+|    │       └─ (Content of file2.1)
+|    └─  File2.2
+└─        └─ (Content of file2.2)
+</div></code></pre>
+<p>Предефинираните типове за подобряване четимостта на кода са следните:</p>
+<details><summary>Предефинирани прости типове </summary>
+<p>
+<pre><code>    type Content = String
+    type FileName = String
+    type DirName = String
+    type PathStr = String
+    type PathArr = [PathStr]
+</code></pre>
+</p>
+Простите типове са предефиирани с цел по-добра четимост. Нуждата от два типа за път - с масив и символен низ, произлиза от удобството на използването рекурсия, използвайки списъци в Haskell.
+</details>
+<p>Сложният тип, дефиниран в задачата е типът, репрезентиращ системен елемент (<code>SystemElement</code>). Той може да бъде един от двата подтипа:</p>
+<ul>
+<li>Файл - Съхраняващ име(Символен низ) и съдържание(Символен низ)</li>
+<li>Директория - Съхраняващ име(Символен низ) и съдържание(Масив от системни елементи)</li>
+</ul>
+<h3 id="%D0%BC%D0%BE%D0%B4%D1%83%D0%BB-%D0%B7%D0%B0-%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%BD%D0%B8%D1%82%D0%B5-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B8">Модул за основните функции</h3>
+<p>За всяка една от основните команди е реализирана съответна функция. Ще разлгледаме някои от тях:</p>
+<ol>
+<li>
+<p>Функцията <code>changeDirectory</code></p>
+<pre class="hljs"><code><div>    <span class="hljs-comment">-- !FULL PATH</span>
+<span class="hljs-title">getDir</span> :: <span class="hljs-type">PathArr</span> -&gt;<span class="hljs-type">SystemElement</span> -&gt;<span class="hljs-type">SystemElement</span>
+<span class="hljs-title">getDir</span> [] currentDir = currentDir
+<span class="hljs-title">getDir</span> (elder:children) currentDir = <span class="hljs-keyword">if</span> nextDir /= dummy <span class="hljs-keyword">then</span> getDir children nextDir <span class="hljs-keyword">else</span> dummy
+    <span class="hljs-keyword">where</span> nextDir = getDirByName elder currentDir
+
+<span class="hljs-title">getParentPath</span> :: <span class="hljs-type">PathArr</span> -&gt; <span class="hljs-type">PathArr</span>
+<span class="hljs-title">getParentPath</span> [<span class="hljs-string">"/"</span>] = [<span class="hljs-string">"/"</span>]
+<span class="hljs-title">getParentPath</span> [path] = [<span class="hljs-string">"/"</span>] <span class="hljs-comment">--if only one dir -&gt; return root</span>
+<span class="hljs-title">getParentPath</span> path = init path
+
+<span class="hljs-title">goToPath</span> :: <span class="hljs-type">PathStr</span> -&gt; <span class="hljs-type">SystemElement</span> -&gt; <span class="hljs-type">SystemElement</span>
+<span class="hljs-title">goToPath</span> <span class="hljs-string">"/"</span> currentRoot = currentRoot
+<span class="hljs-title">goToPath</span> pathStr currentRoot= getDir pathArr currentRoot
+    <span class="hljs-keyword">where</span> pathArr = convertPathToArr pathStr
+
+<span class="hljs-comment">-- Current path is FULL Path</span>
+<span class="hljs-title">changeDirectory</span> :: <span class="hljs-type">PathStr</span> -&gt; <span class="hljs-type">PathStr</span> -&gt; <span class="hljs-type">SystemElement</span> -&gt; <span class="hljs-type">SystemElement</span>
+<span class="hljs-title">changeDirectory</span> pathToGo currentPath currentRoot = goToPath (getFullPath currentPath pathToGo) currentRoot
+</div></code></pre>
+<p>Приема директорията в която трябва да отиде, настоящата директория и настоящата версия на файловото дърво. След това с помощта на няколко помощни функции връща системен елемент - директорията, до която е стигнал методът или <code>dummy</code> директория, ако подаденият път е невалиден.
+<code>dummy</code> директорията представлява импровизирана симулация на <code>Nothing</code> синтаксисът в езика. Използвана е, поради факта, че до момента на предаване на проекта материалът не беше покрит и не бях напълно убеден как да го използвам сигурно.</p>
+</li>
+<li>
+<p>Функцията за <code>concatenateFiles</code>
+Помощния метод <code>addFile</code> добавя файл по подадени: име, съдържание, абсолютен път(под формата на масив), и настояща директория. Типът на връщане е <code>SystemElement</code> тъй, като връща копие на старото файлово дърво, но с добавен новият файл. Методът рекурсивно проемня директориите, които има нужда да бъдат променени, останалите директории се запазват. Когато директорията е невалидна се връща копие на старото дърво, а не се добавят нови папки.</p>
+<p><em><strong>!Ако такъв файл вече съществува, той бива презаписан!</strong></em></p>
+<p>На основния метод - <code>concatenateFiles</code> остава само да конструира файлът, който ще бъде добавен.</p>
+</li>
+<li>
+<p>Функцията <code>removeFile</code> действа по подобен начин на функцията за добавянето на файл - рекурсивно обхожда дървото, открива файла, който трябва да бъде премахнат и го изтрива от съдържанието на съответната директория. Методът отново връща копие на текущото дърво, но без споменатия файл.</p>
+</li>
+</ol>
+<h3 id="%D0%BC%D0%BE%D0%B4%D1%83%D0%BB-%D0%B8%D0%BC%D0%BF%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%B0%D1%89-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0">Модул, имплементиращ интерфейса</h3>
+<p>Този модул има за цел да имплементира REPL. Реализиран е във функцията <code>run</code>. Той прочита команда и с помощта на метода <code>processInput</code> я обработва. Той от приема входните команди, настоящия път и настоящата версия на директорното дърво и връща двойка <code>(newPath, newRoot)</code>, нужна за обновяване на информацията в цикъла. <code>processInput</code> извиква друг помощен <code>runCmd</code>, който обработва изпълнява различни функции в зависимост от подадения аргумент. Функциите са кръстени по същия начин, както функциите в <code>Essentials.hs</code> файла, но към името им е прилепена думата &quot;Command&quot;.</p>
+<h2 id="%D0%B1%D1%8A%D0%B4%D0%B5%D1%89%D0%BE-%D1%80%D0%B0%D0%B7%D0%B2%D0%B8%D1%82%D0%B8%D0%B5">Бъдещо развитие</h2>
+<p>Проектът има множество възможности да бъде доразвит. В истинските UNIX-базирани файлови системи има множество команди, които тук не са реализирани, например:</p>
+<ul>
+<li><code>cp</code> Копиране на файлове</li>
+<li><code>mv</code> Преместване или преименуване на файлове</li>
+<li><code>mkdir</code> Създаване на нова директория</li>
+<li><code>rmdir</code> Изтриване на съществуваща директория</li>
+<li><strong>...</strong></li>
+</ul>
+<p>Изброените функции могат да бъдат реализирани по подобен начин с рекурсивно обхождане на директорното дърво и прилагане на промените където е нужно.</p>
+<h2 id="%D0%B8%D0%B7%D0%BF%D0%BE%D0%BB%D0%B7%D0%B2%D0%B0%D0%BD%D0%B0-%D0%BB%D0%B8%D1%82%D0%B5%D1%80%D0%B0%D1%82%D1%83%D1%80%D0%B0">Използвана литература</h2>
+<ul>
+<li><a href="https://github.com/triffon/fp-2021-22">Материали към курса по Функционално програмиране на спец. Информатика, спец. Компютърни науки, 2 поток и избираемата дисциплина</a></li>
+<li><a href="http://learnyouahaskell.com/">Learn You a Haskell for Great Good! by Miran Lipovača</a></li>
+<li><a href="https://hoogle.haskell.org/">Hoogle</a></li>
+<li><a href="https://hoogle.haskell.org/">Haskell wiki</a></li>
+</ul>
+
+</body>
+</html>
