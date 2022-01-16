@@ -18,9 +18,7 @@ module Essentials where
     contentFile4 :: Content
     contentFile4 = "Content of file4"
 
-    --"Folder1/Folder 1.1"
-
-    --https://paste.pics/FLN8M MAY EXPIRE 05.01
+    --https://paste.pics/FLN8M hand-drawn sketch 
     root :: SystemElement
     root = Directory {directoryName = "/", directoryContent = [
                 Directory "Folder1" [
@@ -34,9 +32,6 @@ module Essentials where
 -- don't want to use Just and Nothing at this point
     dummy :: SystemElement
     dummy = File {fileName = "dummy", fileContent = "dummy" }
---used for iterations
-    iterator :: SystemElement
-    iterator = File {fileName = "Iterator", fileContent = "Iter" }
 --Path converters
     convertPathToStr :: PathArr -> PathStr
     convertPathToStr ["/"] = "/"
