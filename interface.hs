@@ -93,3 +93,5 @@ module Interface where
     readInput input "." = return input
     readInput input currentLine = do currInput <- getLine
                                      readInput (input ++ currentLine) currInput
+
+    main = run "/" root
