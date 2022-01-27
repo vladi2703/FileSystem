@@ -8,7 +8,7 @@ module Interface where
 
     run :: PathStr -> SystemElement -> IO ()
     run currentPath currentRoot = do
-            putStr (currentPath ++ "> " ) --TODO: Test for problems
+            putStr (currentPath ++ "> ")
             cmd <- getLine
             if cmd == ""
                 then run currentPath currentRoot
@@ -40,19 +40,34 @@ module Interface where
                             putStrLn currentPath
                             return (currentPath, currentRoot)
 
+    -- changeDirCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
+    -- changeDirCommand [".."] currentPath currentRoot = return (convertPathToStr (getParentPath (convertPathToArr currentPath)), currentRoot)
+    -- changeDirCommand [path] currentPath currentRoot = if isDir $ changeDirectory path currentPath currentRoot
+    --                                         then return (getFullPath currentPath path, currentRoot)
+    --                                         else do
+    --                                             putStrLn "The system cannot find the path specified"
+    --                                             return (currentPath, currentRoot)
+    -- changeDirCommand _ currentPath currentRoot = do
+    --                                         putStrLn "Invalid arguments"
+    --                                         return (currentPath, currentRoot)
+
     changeDirCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
-    changeDirCommand [".."] currentPath currentRoot = return (convertPathToStr (getParentPath (convertPathToArr currentPath)), currentRoot)
-    changeDirCommand [path] currentPath currentRoot = if changeDirectory path currentPath currentRoot /= dummy
-                                            then return (getFullPath currentPath path, currentRoot)
+    changeDirCommand [path] currentPath currentRoot = changeDirCommandRec (convertPathToArr path) (currentPath, currentRoot)
+    changeDirCommand _ currentPath currentRoot = do
+                                                putStrLn "Invalid arguments"
+                                                return (currentPath, currentRoot)
+
+
+    changeDirCommandRec :: [String] -> (PathStr, SystemElement) -> IO (PathStr, SystemElement)
+    changeDirCommandRec [] (currentPath, currentRoot) = return (currentPath, currentRoot)
+    changeDirCommandRec (".." : rest)  (currentPath, currentRoot) = changeDirCommandRec rest (convertPathToStr (getParentPath (convertPathToArr currentPath)), currentRoot)
+    changeDirCommandRec (next : rest) (currentPath, currentRoot) = if isDir $ changeDirectory next currentPath currentRoot
+                                            then changeDirCommandRec rest (getFullPath currentPath next, currentRoot)
                                             else do
                                                 putStrLn "The system cannot find the path specified"
                                                 return (currentPath, currentRoot)
-    changeDirCommand _ currentPath currentRoot = do
-                                            putStrLn "Invalid arguments"
-                                            return (currentPath, currentRoot)
 
---cd scheme/../haskell/../scheme/../haskell е еквивалентно на cd haskell
---cd Folder1/../Folder2/../Folder1/../Folder2 е еквивалентно на cd Folder2
+--  cd Folder1/../Folder2/../Folder1/../Folder2 е еквивалентно на cd Folder2
     listContentsCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
     listContentsCommand [] currentPath currentRoot = do
                         putStrLn $ getContent $ goToPath currentPath currentRoot
