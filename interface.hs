@@ -28,10 +28,17 @@ module Interface where
     runCmd "ls" args currentPath  currentRoot = listContentsCommand args currentPath currentRoot
     runCmd "cat" args currentPath currentRoot = concatenateFilesCommand args currentPath currentRoot
     runCmd "rm" args currentPath currentRoot = removeFileCommand args currentPath currentRoot
+    runCmd "cp" args currentPath currentRoot = copyFileCommand args currentPath currentRoot
+    runCmd "mv" args currentPath currentRoot = moveFileCommand args currentPath currentRoot
+    
+    
+    runCmd "reset" args currentPath currentRoot = return(currentPath, root)
+    
     runCmd "getRoot" args currentPath currentRoot = do print currentRoot
                                                        return(currentPath, currentRoot)
     runCmd "print" args currentPath currentRoot = do putStrLn (concat args)
                                                      return(currentPath, currentRoot)
+
     runCmd  _   _    currentPath currentRoot = do putStrLn "command not found"
                                                   return(currentPath, currentRoot)
 
@@ -39,17 +46,6 @@ module Interface where
     printWorkingDirectory currentPath currentRoot = do
                             putStrLn currentPath
                             return (currentPath, currentRoot)
-
-    -- changeDirCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
-    -- changeDirCommand [".."] currentPath currentRoot = return (convertPathToStr (getParentPath (convertPathToArr currentPath)), currentRoot)
-    -- changeDirCommand [path] currentPath currentRoot = if isDir $ changeDirectory path currentPath currentRoot
-    --                                         then return (getFullPath currentPath path, currentRoot)
-    --                                         else do
-    --                                             putStrLn "The system cannot find the path specified"
-    --                                             return (currentPath, currentRoot)
-    -- changeDirCommand _ currentPath currentRoot = do
-    --                                         putStrLn "Invalid arguments"
-    --                                         return (currentPath, currentRoot)
 
     changeDirCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
     changeDirCommand [path] currentPath currentRoot = changeDirCommandRec (convertPathToArr path) (currentPath, currentRoot)
@@ -104,9 +100,28 @@ module Interface where
         where pathToRemoveFrom = convertPathToArr(getFullPath currentPath file)
               currentDir = goToPath currentPath currentRoot
 
+    copyFileCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
+    copyFileCommand [] currentPath currentRoot = do putStrLn "Unsuccessful operation" 
+                                                    return(currentPath, currentRoot)
+    copyFileCommand [_] currentPath currentRoot = do putStrLn "Unsuccessful operation" 
+                                                     return(currentPath, currentRoot)
+    copyFileCommand [destination, source] currentPath currentRoot = return(currentPath, copyFile destination source currentDir currentRoot)
+        where currentDir = goToPath currentPath currentRoot
+    
+    moveFileCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
+    moveFileCommand [] currentPath currentRoot = do putStrLn "Unsuccessful operation" 
+                                                    return(currentPath, currentRoot)
+    moveFileCommand [_] currentPath currentRoot = do putStrLn "Unsuccessful operation" 
+                                                     return(currentPath, currentRoot)
+    moveFileCommand [destination, source] currentPath currentRoot = return(currentPath, moveFile destination source currentDir currentRoot)
+        where currentDir = goToPath currentPath currentRoot
+    
+        
+    
     readInput :: String -> String -> IO String
     readInput input "." = return input
     readInput input currentLine = do currInput <- getLine
                                      readInput (input ++ currentLine) currInput
+
 
     main = run "/" root

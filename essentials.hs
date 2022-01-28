@@ -18,7 +18,7 @@ module Essentials where
     contentFile4 :: Content
     contentFile4 = "Content of file4"
 
-    --https://paste.pics/FLN8M hand-drawn sketch 
+    --https://paste.pics/FSY8D hand-drawn sketch 
     root :: SystemElement
     root = Directory {directoryName = "/", directoryContent = [
                 Directory "Folder1" [
@@ -49,7 +49,6 @@ module Essentials where
     getName(Directory name _) = name
 
     getContent :: SystemElement -> Content
-    -- !! LS should unwords getContent 
     getContent (Directory _ contents) = unwords (map getName contents)
     getContent (File _ content) = content
 
@@ -89,7 +88,7 @@ module Essentials where
     goToPath "/" currentRoot = currentRoot
     goToPath pathStr currentRoot= getDir pathArr currentRoot
         where pathArr = convertPathToArr pathStr
-  
+
     -- Current path is FULL Path
     changeDirectory :: PathStr -> PathStr -> SystemElement -> SystemElement
     changeDirectory pathToGo currentPath currentRoot = goToPath (getFullPath currentPath pathToGo) currentRoot
@@ -112,6 +111,7 @@ module Essentials where
                   dirContentNoNewCurr = filter (/=newCurr) dirContent
 --if this file exists it gets overwritten
 
+    concatenateFiles :: [PathStr] -> [Char] -> PathStr -> SystemElement -> SystemElement
     concatenateFiles filePaths outputFile currentPath currentRoot
             = addFile fileName output filePath (goToPath currentPath currentRoot)
         where output = concatMap (\x -> getContent(goToPath (getFullPath currentPath x) currentRoot)) filePaths
@@ -134,3 +134,16 @@ module Essentials where
             where toSearch = head $ init pathToRemoveFrom
                   newCurr = getDirByName toSearch currentDir
                   dirContentNoNewCurr = filter (/=newCurr) dirContent
+
+    copyFile :: PathStr -> PathStr -> SystemElement -> SystemElement -> SystemElement
+    copyFile destination source currentDir root 
+        | isDir (goToPath destination root) = addFile (getName toCopy) (getContent toCopy) destinationArr currentDir
+        | otherwise = currentDir
+            where toCopy = goToPath source root
+                  destinationArr = convertPathToArr destination
+    
+    moveFile :: PathStr -> PathStr -> SystemElement -> SystemElement -> SystemElement
+    moveFile destination source currentDir root 
+        | isDir (goToPath destination root) = removeFile sourceArr (copyFile destination source currentDir root)
+        | otherwise = currentDir
+            where sourceArr = convertPathToArr source
