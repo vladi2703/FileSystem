@@ -31,7 +31,6 @@ module Interface where
     runCmd "cp" args currentPath currentRoot = copyFileCommand args currentPath currentRoot
     runCmd "mv" args currentPath currentRoot = moveFileCommand args currentPath currentRoot
     
-    
     runCmd "reset" args currentPath currentRoot = return(currentPath, root)
     
     runCmd "getRoot" args currentPath currentRoot = do print currentRoot
@@ -69,13 +68,20 @@ module Interface where
                         putStrLn $ getContent $ goToPath currentPath currentRoot
                         return (currentPath, currentRoot)
     listContentsCommand [path] currentPath currentRoot = do
-        putStrLn $ getContent $ goToPath(getFullPath currentPath path) currentRoot
-        return (currentPath, currentRoot)
+        if pathElement == dummy 
+            then do putStrLn "Invalid path"
+                    return (currentPath, currentRoot) 
+        else do putStrLn $ getContent $ pathElement
+                return (currentPath, currentRoot)
+            where pathElement =  goToPath(getFullPath currentPath path) currentRoot
 
     concatenateFilesCommand :: [String] -> PathStr -> SystemElement -> IO (PathStr, SystemElement)
     concatenateFilesCommand args currentPath currentRoot
-        | null outputFile =  do putStrLn $ concatMap (\x -> getContent(goToPath (getFullPath currentPath x) currentRoot)) inputFilePaths
-                                return (currentPath, currentRoot)
+        | null outputFile = if (all (/= dummy) (map (\x -> (goToPath (getFullPath currentPath x) currentRoot)) inputFilePaths)) then
+                                do putStrLn $ concatMap (\x -> getContent(goToPath (getFullPath currentPath x) currentRoot)) inputFilePaths
+                                   return (currentPath, currentRoot)
+                            else do putStrLn "Invalid path"
+                                    return (currentPath, currentRoot)
         | null inputFilePaths = do output <- readInput "" ""
                                    return (currentPath, addFile fileName output filePath (goToPath currentPath currentRoot))
         | otherwise = return (currentPath, concatenateFiles inputFilePaths (head outputFile) currentPath currentRoot)
